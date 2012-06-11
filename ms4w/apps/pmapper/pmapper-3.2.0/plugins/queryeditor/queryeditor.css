@@ -1,0 +1,53 @@
+#qeMain {
+	padding: 2px;	
+}
+
+#qeMain fieldset {
+	background: #F6F3E8;
+	border-color: #ABC5D8 -moz-use-text-color -moz-use-text-color;
+	border-style: groove;
+}
+
+#qeMain fieldset fieldset {
+	padding: 2px 10px;
+	margin: 2px 5px 1px 3px;
+	border-color: #ABC5D8;
+	border-style: solid;
+	border-width: 1px;
+}
+
+#qeMain fieldset legend {
+    background-color: #B1BBC5;
+}
+
+#qeMain fieldset label { 
+	width: auto; /* Width of labels */
+	line-height: normal;
+	margin-right: 5px;
+	display: inline;
+/*	padding-top: 2px;*/
+}
+
+#qeMain input[type=button] {
+	right: 0px;
+}
+
+#qeAttributCriteria fieldset, #qeAttributCriteria {
+	padding-left: 0px;
+}
+
+#qeOperatorGroup li {
+	background: transparent;
+	float: left;
+}
+
+#qeBtnReset, #qeBtnApply {
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 4px;
+}
+
+#qeBtnCancel {
+	float: right;
+}
+

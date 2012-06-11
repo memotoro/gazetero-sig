@@ -1,0 +1,234 @@
+MAP
+
+EXTENT  		-85 -5 -65 14 
+UNITS 			dd
+SIZE 			600 500
+SYMBOLSET 		"../../Gazetero/simbolos/symbols.sym"   
+FONTSET 		"../fuentes/fonts.txt" 
+#RESOLUTION 		96
+IMAGETYPE 		png
+INTERLACE 		OFF
+
+PROJECTION
+	"init=epsg:4326"
+END  
+
+WEB
+	TEMPLATE 		"map.html"
+	IMAGEPATH 		"/ms4w/tmp/ms_tmp/"
+	IMAGEURL 		"/ms_tmp/"
+	METADATA
+
+	END 
+END  
+
+REFERENCE
+	EXTENT 			-87 -5 -57 14
+	#IMAGE 			"../images/colombia_ref.jpg"
+	IMAGE			"C:\ms4w\apps\pmapper\pmapper-3.2.0\images\colombia_ref.jpg"
+	SIZE 			240 149
+	COLOR 			-1 -1 -1
+	OUTLINECOLOR 	255 0 0
+END 
+
+LEGEND
+END
+
+SCALEBAR
+	STATUS 				off
+	TRANSPARENT 		off
+	INTERVALS 			4
+	SIZE 				200 3
+	UNITS 				meters
+	COLOR 				250 250 250
+	OUTLINECOLOR 		0 0 0
+	BACKGROUNDCOLOR 	100 100 100
+	STYLE 				0
+	POSTLABELCACHE 		true
+	LABEL
+		COLOR 			0 0 90
+		SIZE 			small
+	END  
+END 
+
+LAYER 
+	NAME 			"PAISES"
+	CONNECTIONTYPE	postgis
+	CONNECTION		"host=127.0.0.1 dbname=gazetero user=postgres password=postgres port=5432"
+	DATA 			"the_geom from pais using unique gid using srid=21892"
+	STATUS 			on
+	TYPE 			polygon 
+	TRANSPARENCY	40
+	TOLERANCE 		3
+	TOLERANCEUNITS 	pixels	
+	LABELMAXSCALE 	300000		
+	LABELITEM		"nombre"
+	METADATA
+	    "DESCRIPTION" 			"PAISES"
+	    "RESULT_FIELDS" 		"nombre"
+	    "RESULT_HEADERS" 		"NOMBRE"			
+	END	
+    PROJECTION
+		"init=epsg:21892"
+    END    
+    CLASS
+		NAME 			"PAISES"
+		STYLE
+			COLOR 		242 239 233
+		END
+		STYLE
+			OUTLINECOLOR 156 155 154
+			SIZE 		 2
+		END
+	END 
+END
+
+LAYER
+		NAME 			"DEPARTAMENTO"
+		CONNECTIONTYPE	postgis
+		CONNECTION		"host=127.0.0.1 dbname=gazetero user=postgres password=postgres port=5432"
+		DATA 			"the_geom from departamento using unique gid using srid=4326"
+		STATUS 			on
+		TYPE 			polygon 
+		TRANSPARENCY	60
+		TOLERANCE 		3
+		TOLERANCEUNITS 	pixels	
+		LABELMINSCALE 	300000		
+		LABELITEM		"nombre"
+		METADATA
+		    "DESCRIPTION" 			"DEPARTAMENTO"
+		    "RESULT_FIELDS" 		"nombre,codigod"
+		    "RESULT_HEADERS" 		"NOMBRE,CODIGO DEPTO"			
+		END
+		PROJECTION
+			"init=EPSG:4326"
+		END
+		TEMPLATE 		"template.html"
+		DUMP 			true
+		CLASS
+			NAME 		"DEPARTAMENTO"
+			STYLE
+				OUTLINECOLOR 	0 79 0 
+				COLOR 			-1 -1 -1
+				SIZE 			10
+			END
+			LABEL
+				TYPE 		truetype
+				FONT 		"arial"
+				SIZE 		6
+				ANTIALIAS 	on
+				COLOR 		168 0 0
+				POSITION 	cc
+			END
+		END
+	END
+	
+	LAYER
+		NAME 			"MUNICIPIO"
+		CONNECTIONTYPE	postgis
+		CONNECTION		"host=127.0.0.1 dbname=gazetero user=postgres password=postgres port=5432"
+		DATA 			"the_geom from municipio using unique gid using srid=4326"
+		STATUS 			on
+		TYPE 			polygon 
+		TRANSPARENCY	60
+		TOLERANCE 		3
+		TOLERANCEUNITS 	pixels				
+		LABELMAXSCALE 	500000
+		LABELITEM		"nombre"
+		METADATA
+		    "DESCRIPTION" 		"MUNICIPIO"
+		    "RESULT_FIELDS" 	"nombre,codigom"
+		    "RESULT_HEADERS" 	"NOMBRE,CODIGO MUNICIPIO"				
+		END
+		PROJECTION
+			"init=EPSG:4326"
+		END
+		TEMPLATE 	"template.html"
+		DUMP 		true
+		CLASS
+			NAME		"MUNICIPIO"
+			STYLE
+				OUTLINECOLOR 	114 21 1
+				COLOR 			-1 -1 -1
+				SIZE 			4
+			END
+			LABEL
+				TYPE 			truetype
+				FONT			"arial"
+				SIZE 			6
+				ANTIALIAS 		on
+				COLOR 			11 62 180
+				OUTLINECOLOR 	255 255 255
+				POSITION 		cc
+				BUFFER			4			
+			END
+		END
+	END
+	
+	LAYER
+		NAME 			"LOCALIDAD"
+		CONNECTIONTYPE	postgis
+		CONNECTION		"host=127.0.0.1 dbname=gazetero user=postgres password=postgres port=5432"
+		DATA 			"the_geom from localidad using unique gid using srid=4326"
+		STATUS 			on
+		TYPE 			point 
+		TRANSPARENCY	60
+		TOLERANCE 		3
+		TOLERANCEUNITS 	pixels	
+		LABELITEM		"nombre"
+		LABELMAXSCALE	2000000
+		METADATA
+		    "DESCRIPTION" 		"LOCALIDAD"
+		    "RESULT_FIELDS" 	"nombre,codigol,fechasistema,nivelprecision,observaciones,fuentelocalidad,"
+		    "RESULT_HEADERS" 	"NOMBRE,CODIGO LOCALIDAD,FECHA,NIVEL DE PRECISIÓN,OBSERVACIONES,FUENTE"				
+		END
+		PROJECTION
+			"init=EPSG:4326"
+		END
+		TEMPLATE 	"template.html"
+		DUMP 		true
+	    CLASS
+			NAME	"LOCALIDAD"
+			STYLE 
+				SYMBOL 		"DIAMANTE"
+				SIZE 		7
+				COLOR 		20 20 255
+			END
+			LABEL
+				TYPE 			truetype
+				FONT 			"arial"
+				SIZE 			9
+				ANTIALIAS 		on
+				COLOR 			0 0 0
+				OUTLINECOLOR 	255 255 255
+				POSITION 		lc	    
+				BACKGROUNDCOLOR 255 255 128
+				BACKGROUNDSHADOWCOLOR 	150 150 150
+				BACKGROUNDSHADOWSIZE 		2 2				
+			END
+		END	
+	END		
+
+  LAYER
+    NAME         		"MOSAICO_LANDSAT"
+    TYPE         		raster
+    OFFSITE      		0 0 0
+    STATUS       		on
+    CONNECTIONTYPE 		wms
+    CONNECTION 			"http://geoservice.igac.gov.co/WMSLandsat"
+    PROJECTION
+      "init=EPSG:4326"
+    END    
+    METADATA
+		"wms_name" 					"Landsat"
+		"wms_server_version" 		"1.1.1"
+		"wms_format" 				"image/png"
+		"wms_exceptions_format" 	"application/vnd.ogc.se_xml"
+		"wms_connectiontimeout" 	"180"
+		"wms_srs" 					"EPSG:4326"
+    END
+
+  END 	
+	
+	
+END 

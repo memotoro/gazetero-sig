@@ -1,0 +1,119 @@
+<?php
+// prevent XSS
+if (isset($_REQUEST['PM_INCPHP'])) exit();
+
+session_start();
+require_once($_SESSION['PM_INCPHP'] . "/common.php");
+require_once($_SESSION['PM_INCPHP'] . "/globals.php");
+
+header("Content-type: text/html; charset=$defCharset");
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo $gLanguage ?>" xml:lang="<?php echo $gLanguage ?>">
+
+<head>
+ <link rel="stylesheet" href="templates/default.css" type="text/css"/>
+ <style type="text/css">
+<!--
+.Estilo4 {font-size: 11px}
+-->
+ </style>
+</head>
+<body class="TOOLFRAME">
+<h3 align="center">Ayuda del Visor de Localidades</h3>
+<h5><em>Descripci&oacute;n de la Interfaz de Usuario</em></h5> 
+<table border=1>
+<tr>
+	<td><div align="left"><span class="Estilo4">Dentro de la distribuci&oacute;n general que presenta el visor de localidades se identifican las siguientes: </span><ul class="Estilo4">
+		<li>Panel Inferior: Coordenadas geogr&aacute;ficas.</li>
+		<li>Panel Central: Despliegue de Informaci&oacute;n Geogr&aacute;fica. All&iacute; se encuentran principalmente el visor geogr&aacute;fico y su respectiva barra de herramientas, un men&uacute; desplegable, una escala num&eacute;rica y gr&aacute;fica.</li>
+		<li>Panel Derecho: La vista general del mapa, la lista de capas y la leyenda.</li>
+		<li>Panel Superior e Izquierdo: Logos Institucionales..</li> 
+	</ul></div></td>		
+</tr>	
+<tr>
+</table>
+<br/>
+<h5><em>Barra de Herramientas</em></h5>
+<table border="1">
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/home_off.gif"/></div></td>
+	<td><div align="left"><strong>Visualizaci&oacute;n completa:</strong> Esta herramienta permite visualizar el mapa de forma completa en el visor geogr&aacute;fico.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/back_off.gif"/></div></td>
+	<td><div align="left"><strong>Anterior:</strong> Al hacer clic en este bot&oacute;n el usuario podr&aacute; visualizar la imagen que ten&iacute;a en el visor geogr&aacute;fico en un momento anterior.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/fwd_off.gif"/></div></td>
+	<td><div align="left"><strong>Siguiente:</strong> Al hacer clic en este bot&oacute;n el usuario podr&aacute; visualizar la siguiente imagen en el visor geogr&aacute;fico, previamente generada por alguna operaci&oacute;n.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/zoomin_off.gif"/></div></td>
+	<td><div align="left"><strong>Zoom para acercar:</strong> Al hacer clic en este bot&oacute;n la vista actual se debe acercar a la extensi&oacute;n espacial solicitada por el usuario. Esta extensi&oacute;n se hace a trav&eacute;s de un cuadrado generado por el mouse, que el usuario  define de acuerdo a la zona que necesite.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/zoomout_off.gif"/></div></td>
+	<td><div align="left"><strong>Zoom para alejar:</strong> Al hacer clic en este bot&oacute;n la vista actual se debe alejar de la extensi&oacute;n espacial solicitada por el usuario. Para este caso el usuario solo necesita hacer clic en cualquier parte del visor geogr&aacute;fico y &eacute;ste realizar&aacute; la orden.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/pan_off.gif"/></div></td>
+	<td><div align="left"><strong>Mover:</strong> Este bot&oacute;n le permite moverse libremente por el visor geogr&aacute;fico. El usuario indica un punto inicial y un punto final dentro de la vista del mapa y hecho esto, el sistema debe desplazar la vista del mapa tomando como referencia los puntos ingresados.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/identify_off.gif"/></div></td>
+	<td><div align="left"><strong>Identificar:</strong> El bot&oacute;n identificar muestra la informaci&oacute;n asociada a los objetos geogr&aacute;ficos del mapa. Primero se  selecciona el bot&oacute;n y luego se hace clic sobre el elemento del que se desea ver dicha informaci&oacute;n.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/select_off.gif"/></div></td>
+	<td><div align="left"><strong>Seleccionar:</strong> El bot&oacute;n seleccionar permite ver los atributos del elemento seleccionado y adicional a esto dicho elemento geogr&aacute;fico debe cambiar de color. El usuario puede seleccionar uno o muchos elementos del mapa, por medio de un cuadrado que &eacute;l define, y seleccionando la capa geogr&aacute;fica de la cual desea informaci&oacute;n, en la parte inferior derecha del &aacute;rea de despliegue del mapa.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/auto_identify_off.gif"/></div></td>
+	<td><div align="left"><strong>Auto identificar:</strong> Se hace clic en el bot&oacute;n Auto Identificar y el usuario puede desplazarse libremente por el visor geogr&aacute;fico, pasando por cada uno de los elementos, de los cuales se ver&aacute; la informaci&oacute;n de sus atributos por medio de una ventana emergente. No se necesita hacer clic en cada elemento del que se requiera informaci&oacute;n. Se requiere seleccionar la capa de la cual se desea informaci&oacute;n, en la parte inferior derecha del &aacute;rea de despliegue del mapa.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/measure_off.gif"/></div></td>
+	<td><div align="left"><strong>Medida:</strong> Esta herramienta le permite al usuario medir distancias entre dos o m&aacute;s puntos, sobre cualquier objeto que se encuentre en el visor geogr&aacute;fico.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/transparency_off.gif"/></div></td>
+	<td><div align="left"><strong>Transparencia:</strong> Con este bot&oacute;n el usuario tiene la opci&oacute;n de fijar el nivel de transparencia seg&uacute;n su criterio. El cambio de transparencia se hace de manera gradual y se debe seleccionar  la capa geogr&aacute;fica que se desea ajustar.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/reload_off.gif"/></div></td>
+	<td><div align="left"><strong>Actualizar el mapa:</strong> Haciendo clic en este bot&oacute;n el visor geogr&aacute;fico se actualiza; este bot&oacute;n se utiliza principalmente luego de haber ejecutado consultas o seleccionado elementos, para borrar los resaltados que realiza la aplicaci&oacute;n.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/image015.png"/></div></td>
+	<td><div align="left"><strong>Zoom acercar y Zoom alejar:</strong> Por medio de esta herramienta se puede alejar o acercar el zoom de una forma gradual, de acuerdo a las especificaciones del usuario.</div></td>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/Escala.jpg"/></div></td>
+	<td><div align="left"><strong>Escala:</strong> Permite seleccionar una escala de visualizaci&oacute;n predeterminada haciendo clic en la caja de texto que muestra el valor de la escala. Tambi&eacute;n permite ingresar un valor num&eacute;rico de escala deseado por el usuario.</div></td>
+</tr>
+</table>
+<br/>
+<h5><em>Vista General del Mapa (Overview), Listado de Capas y &Aacute;rea de Despliegue</em></h5>
+<table border="1">
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/image021.png"/></div></td>
+	<td><div align="left"><strong>Herramientas:</strong> Dentro de esta herramienta se encuentran varias opciones a las que el usuario puede acceder, tales como las que se presentan a  continuaci&oacute;n.</div></td>
+</tr>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/image022.png"/></div></td>
+	<td><div align="left"><strong>Imprimir Mapa:</strong> Esta herramienta da opciones de configuraci&oacute;n para la impresi&oacute;n. El usuario puede seleccionar entre imprimir el mapa como una p&aacute;gina HTML (haciendo clic en el bot&oacute;n "Crear p&aacute;gina de impresi&oacute;n) o crear un mapa de impresi&oacute;n en pdf (seleccionando esta opci&oacute;n y luego haciendo clic en el bot&oacute;n "Crear p&aacute;gina de impresi&oacute;n").</div></td>
+</tr>
+</tr>
+<tr>
+	<td><div align="center"><img src="./Gazetero/help/help_files/image023.png" /></div></td>
+	<td><div align="left"><strong>Descargar:</strong> Esta herramienta permite realizar descargas del mapa que se muestre en el visor geogr&aacute;fico, como imagen. As&iacute; mismo proporciona opciones en las que el usuario puede seleccionar la imagen de acuerdo a la resoluci&oacute;n  que necesite, y ofrece el formato de imagen GeoTIFF.</div></td>
+</tr>
+</tr>
+</table>
+<br/>
+<h5>&nbsp;</h5>
+</body>
+</html>

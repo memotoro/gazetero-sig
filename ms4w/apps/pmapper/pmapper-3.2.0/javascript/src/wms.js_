@@ -1,0 +1,104 @@
+
+/******************************************************************************
+ *
+ * Purpose: functions for dynamically loading WMS layers
+ * Author:  Armin Burger
+ *
+ ******************************************************************************
+ *
+ * Copyright (c) 2003-2006 Armin Burger
+ *
+ * This file is part of p.mapper.
+ *
+ * p.mapper is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. See the COPYING file.
+ *
+ * p.mapper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with p.mapper; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ ******************************************************************************/
+
+
+/**
+ * open WMS dialog
+ */
+function openWMSDlg() {
+    window.open('wms_dialog.phtml?'+SID, 'wmsdlg','width=500,height=500,status=no,resizable=yes');
+}
+
+
+
+function wms_getLayers() {
+    var IFrameDoc = frames['layerIFrame'];
+    var inputList = IFrameDoc.document.getElementsByTagName('input');
+    
+    var wmsLayerTitle = escape(IFrameDoc._$('wmsLayerTitle').value);
+    var layerstring = '';
+    var stylestring = '';
+    
+    for (var i=0; i<inputList.length; i++) {
+        inputElem = inputList[i];
+        if (inputElem.type == 'checkbox' && inputElem.checked == true) {
+            layerstring += escape(inputElem.value) + ',';
+            
+            var styleName = 'style_' + inputElem.value; 
+            var styleList = IFrameDoc.document.getElementsByName(styleName);
+            for (var s=0; s<styleList.length; s++) {
+                radioElem = styleList[s];
+                if (radioElem.checked == true) {
+                    selStyle = (radioElem.value == 'default000' ? '' : radioElem.value);  
+                    stylestring += escape(selStyle) + ',';
+                }
+            }
+        }
+    }
+    
+    layerstring = layerstring.substr(0, layerstring.length - 1);
+    stylestring = stylestring.substr(0, stylestring.length - 1);
+
+    var serviceParams = _$('serviceParams');
+    var imgformat = serviceParams.imgformat.options[serviceParams.imgformat.selectedIndex].value;
+    var srs =  serviceParams.epsg.options[serviceParams.epsg.selectedIndex].value;
+    var transparent = _$('imgtransparent').checked ? 'TRUE' : 'FALSE'; 
+    
+    //alert(wmsLayerTitle + layerstring + stylestring + imgformat + srs)
+    opener.wms_addLayers(wmsLayerTitle, layerstring, stylestring, imgformat, srs, transparent)    
+}
+
+
+
+function wms_addLayers(wmsLayerTitle, layerstring, stylestring, imgformat, srs, transparent) {
+    var wmsurl = PM_XAJAX_LOCATION + 'x_addwms.php?' + SID;
+    wmsurl += '&wmslayertitle=' + wmsLayerTitle +  '&layerstring=' + layerstring + '&stylestring=' + stylestring;
+    wmsurl += '&imgformat=' + imgformat + '&srs=' + srs + '&transparent=' + transparent;
+    //alert(wmsurl);
+    addWMS(wmsurl, '');
+}
+
+
+
+function showAbstract(layerAbstract) {
+    var abstractAreaTo = window.parent.document.getElementById('layerAbstractArea');
+    var abstractAreaFromHTML = document.getElementById(layerAbstract).innerHTML;
+    abstractAreaTo.innerHTML = abstractAreaFromHTML;
+}
+    
+    
+function writeServiceName() {
+    
+}
+
+
+function showCapabilities() {
+    var wmsURL = document.loadwmsform.wmsurl.value + 'REQUEST=GetCapabilities&SERVICE=WMS&VERSION=1.1.1';
+    wmsURL = 'wms_showxml.phtml?' + opener.top.SID; // + 'wmsurl=' + escape(wmsURL) ;
+    var capswin = window.open(wmsURL, "wmsCapswin","width=600,height=700,status=no,resizable=yes,scrollbars=yes");
+}

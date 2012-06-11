@@ -1,0 +1,52 @@
+﻿<?xml version='1.0'?>
+<!-- <?xml-stylesheet href="style.xsl" type="text/xsl" ?> -->
+
+<searchlist version="1.0">
+    
+    <dataroot>$</dataroot>
+    <!--
+    <searchitem name="cities" description="City">
+        <layer type="shape" name="cities10000eu">
+            <field type="s" name="NAME" description="City"  wildcard="0" />
+        </layer>
+    </searchitem>
+    
+    <searchitem name="countries" description="Country">
+        <layer type="shape" name="countries">
+    		<field type="s" name="ISO2_CODE" description="Country" wildcard="2">
+				<definition type="options" connectiontype="ms" sort="asc" firstoption="*">
+					<mslayer encoding="ISO-8859-1" keyfield="ISO2_CODE" showfield="NAME"/>
+				</definition>
+			</field>
+		</layer>
+    </searchitem>
+    -->
+    
+    
+    <!-- Sample for suggest and options -->
+    <!-- for documentation see http://svn.pmapper.net/trac/wiki/ -->
+    
+     <!-- 
+	 <searchitem name="Departamento" description="Departamento">
+        <layer type="postgis" name="departamento">
+    		<field type="s" name="nombre" description="Departamento" wildcard="0">
+				<definition type="suggest" connectiontype="db" sort="asc" minlength="1" dependfld="nombre">
+                    <dsn encoding="UTF-8">pgsql://postgres:postgres@localhost/gazetero</dsn>
+                    <sql>SELECT DISTINCT nombre FROM departamento WHERE nombre ~* '^[search]' ORDER BY nombre</sql>
+				</definition>
+			</field>
+		</layer>
+    </searchitem>
+	
+	<searchitem name="Municipio" description="Municipio">
+        <layer type="postgis" name="municipio">
+    		<field type="s" name="nombre" description="Municipio" wildcard="0">
+				<definition type="suggest" connectiontype="db" sort="asc" minlength="1" dependfld="nombre">
+                    <dsn encoding="UTF-8">pgsql://postgres:postgres@localhost/gazetero</dsn>
+                    <sql>SELECT DISTINCT nombre FROM municipio WHERE nombre ~* '^[search]' ORDER BY nombre</sql>
+				</definition>
+			</field>
+		</layer>
+    </searchitem>
+	
+</searchlist> 

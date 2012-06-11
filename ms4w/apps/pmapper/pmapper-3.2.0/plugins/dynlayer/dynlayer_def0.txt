@@ -1,0 +1,69 @@
+[
+    {"require": "myDynlayer.php",
+     "layerlist": 
+        [
+           {"name":"cities_1", 
+            "type":"MS_LAYER_POINT", 
+            "data":"cities10000eu", 
+            "tolerance":6, 
+            "toleranceunits":6,
+            "labelitem":"asciiname",
+            "template":"void",
+            
+            "PROJECTION":"init=epsg:4326",
+            
+            "METADATA": 
+               {"DESCRIPTION":"Cities",
+                "RESULT_FIELDS":"NAME, ISO2_CODE, POPULATION, GTOPO30",
+                "RESULT_HEADERS":"Name,Country,Inhabitants,Altitude",
+                "RESULT_HYPERLINK":"NAME",
+                "LAYER_ENCODING":"UTF-8"
+               },
+               
+            "class":
+               {"name":"> 100'000",
+                "EXPRESSION":"([population] > 1000000)",
+                    
+                "label":  
+                   {"position": 2,
+                    "size": 1,
+                    "color": [0, 0, 150],
+                    "backgroundcolor": [255, 255, 128],
+                    "backgroundshadowcolor": [150, 150, 150],
+                    "backgroundshadowsizex": 2, 
+                    "backgroundshadowsizey": 2,
+                    "buffer": 0
+                   },
+                
+                "style":  
+                   {"symbolname":"square",
+                    "size":10,
+                    "color": [255, 0, 0],
+                    "outlinecolor": [0, 0, 0]
+                   } 
+                      
+                }
+           },
+           
+           {"TEMPLATE":["cities10000eu", false],
+            "name":"cities_2",
+            "class":
+               {"name":"> 100'000",
+                "EXPRESSION":"([population] > 10000)",
+                "style":  
+                   {"symbolname":"circle",
+                    "size":5,
+                    "color": [0, 0, 0],
+                    "outlinecolor": [0, 0, 0]
+                   }
+                }
+           }
+            
+        ]
+    
+    }
+]
+
+        
+        
+

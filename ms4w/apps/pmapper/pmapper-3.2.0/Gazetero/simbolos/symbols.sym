@@ -1,0 +1,21 @@
+SYMBOL
+	NAME "PUNTO"
+	TYPE ELLIPSE
+	POINTS
+	  1 1
+	END
+    FILLED TRUE
+END
+
+SYMBOL
+    NAME "DIAMANTE"
+    TYPE ELLIPSE
+    POINTS 
+	  2 0
+      4 2
+      2 4
+      0 2
+      2 0
+    END
+    FILLED true
+END

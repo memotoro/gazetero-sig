@@ -1,0 +1,17 @@
+
+LAYER
+  NAME "prov_bound"
+  TYPE RASTER
+  STATUS ON
+  CONNECTION "http://www2.dmsolutions.ca/cgi-bin/mswms_gmap?"
+  CONNECTIONTYPE WMS
+  METADATA
+    "wms_srs"             "EPSG:42304"
+    "wms_name"            "prov_bound"
+    "wms_server_version"  "1.1.1"
+    "wms_format"          "image/gif"
+    "wms_style"           "mystyle"
+    "wms_connectiontimeout" "60"
+  END
+END
+
