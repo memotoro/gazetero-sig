@@ -1,0 +1,193 @@
+/* STYLE FOR QUERY OUTPUT (SEARCH, IDENTIFY, SELECT) */
+
+
+.pmInfo {
+    color: #D4D0C8;
+    overflow: auto;
+    background:#f5f5f5;
+}
+
+.pmInfo {
+    color: #D4D0C8;
+    overflow: auto;
+    background:#eeeeee;
+    color: #000000;
+}
+
+.pmInfo TABLE {
+    width: 100%;
+    color: #D4D0C8;
+    border-left:  1px solid #D4D0C8;
+    border-bottom:  1px solid #D4D0C8;
+    /*border-top:  1px solid #D4D0C8;*/
+}
+
+
+.pmInfo TD {
+    font-size: 10px;
+    text-align: center;
+    color: #000000;
+    background-color: #FBFBFB;
+    padding: 1px 3px 1px 4px;
+    border-top:    1px solid #D4D0C8;
+    border-left:   none;
+    border-right:  1px solid #D4D0C8;
+    border-bottom: none;
+}   
+
+/* Link for zoom to feature */
+.pmInfo TD.zoomlink {
+    width: 25px;
+    background-color:#EBEADB;
+    border-top:  1px solid #D4D0C8;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #ACA899;
+    border-bottom: none;
+}
+
+
+/* FRAME for closing query win */
+.pmInfo TABLE.close {
+    border: none;
+}
+
+.pmInfo TD.close {
+    text-align: right;
+    background-color:#EBEADB;
+    border-top:  1px solid #D4D0C8;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #ACA899;
+    border-bottom: none;
+    padding: 1px;
+}
+
+/* Link for zoom to feature */
+.sortable A {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.pmInfo img {
+    border: 0;
+    padding: 0px;
+}
+
+
+
+/* TITLE BAR (with close button) */
+.QUERYHEADER TD {
+    background-color: #B1BBC5; 
+    /*background-color: #336699;*/
+}
+
+/* LAYER NAME */
+.LAYERHEADER  {
+    font-weight: bold;
+    text-align: left;
+    padding: 6px 3px 1px 3px;
+}
+
+
+
+/** 
+ * SORTABLE TABLES 
+ */
+ 
+ /* header line with <TH> */
+table.sortable a.sortheader {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap; 
+    color:#003333;
+    display: block;
+    background-color:#EBEADB;
+    padding: 2px;
+    border-top: 0px solid #FFFFFF;
+    border-left: 1px solid #FFFFFF;
+    border-right: 1px solid #ACA899;
+    border-bottom: 2px solid #D6D2C2;
+}
+
+table.sortable span.sortarrow {
+    color: black;
+    text-decoration: none;
+}
+
+
+/**
+ * Styles related to attribute search
+ */
+.pm_searchcont {
+    position:absolute;
+    left: 0px;
+    top:5px;
+} 
+
+.pm_searchoptions select{
+    width:auto;
+}
+
+.searchitem select {
+    width: auto;
+    max-width: 140px;
+}
+
+table.searchitem td {
+    padding: 0px 1px 0px 4px;
+}
+
+td.searchdesc {
+    /*width:80px;*/
+}
+
+input.search_textinput_compare {
+    width:6em;
+}
+
+table.searchitem div {
+    display: inline;
+}
+
+table.searchitem div img {
+    vertical-align:bottom;
+    padding: 0px 0px 1px 10px;
+}
+
+/**
+ * Style for suggest box
+ */
+.ac_results {
+    border: 1px solid gray;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: absolute;
+    z-index: 10000;
+    display: none;
+    max-height: 300px;
+    overflow: auto;
+}
+
+.ac_results li {
+    padding: 2px 5px;
+    white-space: nowrap;
+    color: #101010;
+    text-align: left;
+}
+
+.ac_over {
+    cursor: pointer;
+    background-color: #003366; /*#b6bdd2; #F0F0B8;*/
+}
+
+.ac_results li.ac_over {
+    color: #ffffff;
+}
+
+.ac_match {
+    text-decoration: underline;
+} 
+
