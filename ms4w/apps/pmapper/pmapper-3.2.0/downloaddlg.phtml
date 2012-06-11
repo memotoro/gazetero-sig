@@ -1,0 +1,83 @@
+<?php
+/******************************************************************************
+ *
+ * Purpose: download dialog 
+ * Author:  Armin Burger
+ *
+ ******************************************************************************
+ *
+ * Copyright (c) 2003-2006 Armin Burger
+ *
+ * This file is part of p.mapper.
+ *
+ * p.mapper is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. See the COPYING file.
+ *
+ * p.mapper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with p.mapper; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ ******************************************************************************/
+// prevent XSS
+if (isset($_REQUEST['PM_INCPHP'])) exit();
+
+session_start();
+
+require_once($_SESSION['PM_INCPHP'] . "/common.php");
+require_once($_SESSION['PM_INCPHP'] . "/globals.php");
+
+header("Content-type: text/html; charset=$defCharset");
+
+if (isset($_SESSION['dpiLevels'])) {
+    $dpiList = preg_split('/[\s,]+/', $_SESSION['dpiLevels']);
+} else {
+    $dpiList = array(100, 200, 300);
+}
+
+$defDpi = $dpiList[0];
+
+
+?>
+<html>
+
+<head>
+</head>
+
+<body>
+<div style="padding-left: 8px;">
+
+ <h4> <?php echo (_p("Map Resolution for Download")) ?> :</h4>
+ <form id="dlform" action="download.phtml" target="_blank" method="post">
+  <p>
+  <?php
+    foreach($dpiList as $d) {
+        $checked = ($d == $defDpi ? "checked=\"checked\"" : "");
+        echo ("<input type=\"radio\" name=\"dldpi\" value=\"$d\" $checked />$d DPI<br />\n");
+    }
+  ?>
+  </p>
+  <p>
+   <input type="checkbox" name="imgFormat" value="GTiff" />GeoTIFF
+  </p>
+  <p>
+   <input style="width:70px" type="button" value="OK" onclick="javascript:submit();$('#pmDlgContainer').hide()" />
+  </p>
+  <p>  
+   <?php echo ("<input type=\"hidden\" name=\"" . ini_get("session.name") . "\" value=\"" . session_id() . "\" />") ?>
+   <div><input type="hidden" name="config" value="<?php echo $_SESSION['config'] ?>" /></div>
+  </p>
+ </form>
+</div>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,86 @@
+<?php
+    require_once("config/__startup_config.php");
+    require_once("incphp/common.php");
+    require_once("incphp/init/initmap.php");
+    include_once("config/$PM_PHP_CONFIG");
+
+    /**
+     * Return a list (comma-separated string) of all image files to load
+     */
+    function getImgFiles($imgDir, $toolbarTheme)
+    {
+        $imgFNList = "";
+                 
+        //- from /images dir
+        $imgFiles0 = scandirByExt($imgDir, "*");
+        foreach ($imgFiles0 as $if) $imgFNList .= "'$if', ";
+        
+        //- from /images/legend dir
+        $imgFilesLeg = scandirByExt("$imgDir/legend/", "*");
+        foreach ($imgFilesLeg as $if) $imgFNList .= "'legend/$if', ";
+        
+        //- from /images/buttons/... dir
+        $imgFilesLeg = scandirByExt("$imgDir/buttons/$toolbarTheme/", "*");
+        foreach ($imgFilesLeg as $if) $imgFNList .= "'buttons/$toolbarTheme/$if',";
+        
+        return substr($imgFNList, 0, -1);
+    }
+    
+    
+    $jsReferences = Init_map::initJSReference();
+    
+    $imageDir = substr($PM_BASECONFIG_DIR, 0, -7) . "/images/";
+    $imgFNList = getImgFiles($imageDir, $toolbarTheme);
+    
+    
+?>
+<html>
+<head>
+<script type="text/javascript">
+    function openFrames(sizevals, gLanguage, config, startParameters){
+        var sizearray = sizevals.split('#');
+        var winwidth  = parseInt(sizearray[0]);
+        var winheight = parseInt(sizearray[1]);
+        var winsize   = sizearray[2];
+        myw=window.open("map.phtml?winsize=" + winsize + "&language=" + gLanguage + "&config=" + config + startParameters, "MapServerTestSuite", "width=" + winwidth + ",height=" + winheight + ",menubar=no,scrollbar=auto,resizable=yes,top=0,left=0,status=yes");
+        return false;
+    }
+  
+    function preloadImages() {
+        if (document.images) { 
+            preloadImg = new Image();
+            // set image url
+            var imageUrl = new Array(<?php echo $imgFNList ?>);
+
+            for (var i=0; i<=imageUrl.length; i++) 
+                preloadImg.src = 'images/' + imageUrl[i];
+        }
+    }
+  
+  
+</script>
+
+  <?php echo $jsReferences ?>
+
+</head>
+
+<body bgcolor="white" onload="preloadImages()">
+
+
+<h2> Examples how to start the application from hyperlinks</h2>
+
+<h3>Starting with different window size, style and language:</h3>
+<a href="map.phtml" onclick="return openFrames('820#580#small', 'en', '', '')">Small, English</a><p>
+<a href="map.phtml" onclick="return openFrames('960#700#medium', 'de', '', '')">Medium, German </a><p>
+<a href="map.phtml" onclick="return openFrames('1100#860#large', 'fr', '', '')">Large, French </a><p>
+<p><br><br>
+
+<h3>Zoom to pre-defined extent:</h3>
+<a href="map.phtml" onclick="return openFrames('820#580#small', 'en', '', '&me=3678982,2134585,4721175,3092410')">Extent defined manually (x/y min/max)</a><p>
+<a href="map.phtml" onclick="return openFrames('960#700#medium', 'it', '', '&zoomLayer=countries&zoomQuery=NAME@1@Italy@1@1')">Extent from feature (countries, Italy), Italian</a><p>
+<a href="map.phtml" onclick="return openFrames('960#700#medium', 'it', '', '&zoomLayer=countries&zoomQuery=name@1@Italy@0@1')">Extent from feature, NO highlight</a><p>
+<a href="map.phtml" onclick="return openFrames('960#700#medium', 'it', '', '&zoomLayer=countries&zoomQuery=NAME@1@Italy@0@0')">Extent from feature, NO highlight, NO max extent</a><p>
+<br>
+
+</body>
+</html>

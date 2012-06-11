@@ -1,0 +1,171 @@
+<?php
+
+/******************************************************************************
+ *
+ * Purpose: p.mapper application main entry file 
+ * Author:  Armin Burger
+ *
+ ******************************************************************************
+ *
+ * Copyright (c) 2003-2006 Armin Burger
+ *
+ * This file is part of p.mapper.
+ *
+ * p.mapper is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. See the COPYING file.
+ *
+ * p.mapper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with p.mapper; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ ******************************************************************************/
+
+/*
+header("Cache-Control: no-cache, must-revalidate, private, pre-check=0, post-check=0, max-age=0");
+header("Expires: " . gmdate('D, d M Y H:i:s', time()) . " GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Pragma: no-cache");
+*/
+
+session_start();
+
+// INCLUDE PHP FILES
+require_once("config/__startup_config.php");
+require_once("$PM_INCPHP/group.php");
+require_once("$PM_INCPHP/globals.php");
+require_once("$PM_INCPHP/common.php");
+require_once("$PM_INCPHP/custom.php");
+require_once("$PM_INCPHP/util.php");
+require_once("$PM_INCPHP/init/initmap.php");
+require_once("$PM_INCPHP/legend.php");
+include_once("$PM_INCPHP/init/init.php");
+@include_once("config/$PM_PHP_CONFIG");
+
+
+foreach($plugin_phpFileList as $f) {
+    include_once($f);
+}
+
+
+header("Content-type: text/html; charset=$defCharset");
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo $gLanguage ?>" xml:lang="<?php echo $gLanguage ?>">
+
+<head>
+ <meta http-equiv="Content-Script-Type" content="text/javascript" />
+ <meta name="description" content="p.mapper - MapServer PHP/MapScript Framework" />
+ <meta name="author" content="Armin Burger" />
+ <meta name="keywords" content="p.mapper, pmapper, MapServer, PHP, MapScript" />
+
+ <title><?php echo $pmTitle ?></title>
+ 
+ 
+  <?php 
+    echo $jsConfigReference;
+    
+    // Load all JS files from 'javascript' and 'config' directory
+    echo $jsReference; 
+
+    // Reference all global JS variables
+    include("$PM_INCPHP_LOCATION/js_init.php"); 
+  ?>
+ 
+ <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+ <link rel="stylesheet" href="templates/default.css" type="text/css" />
+ <link rel="stylesheet" href="templates/layout.css" type="text/css" />
+ <link rel="stylesheet" href="templates/treeview.css" type="text/css" />
+ <link rel="stylesheet" href="templates/toc.css" type="text/css" />
+ <link rel="stylesheet" href="templates/query.css" type="text/css" />
+ <link rel="stylesheet" href="templates/dialog.css" type="text/css" />
+ <!--[if lt IE 7]> 
+ <link rel="stylesheet" href="templates/ie6.css" type="text/css" />
+ <![endif]--> 
+ 
+ <?php 
+    // Load all CSS files from config directory
+    echo $cssReference; 
+ ?>
+ 
+</head>
+
+<body class="BGCLG" onload="pm_init();">
+
+<!-- EAST -->
+<div id="east" style="overflow:auto;" class="TOC">
+    <!-- LEGEND/TOC -->
+    <form id="layerform" method="get" action="">
+    <div id="toc" class="TOC" style="position:absolute; left:0px; top:0px; width:auto; height:<?php echo ($_SESSION['userAgent'] == "mozilla" ? "100%" : "auto") ?>; overflow: auto; z-index:2;">
+    </div>
+    </form>
+</div>
+
+
+<!-- MAPZONE -->
+<div id="mapZone" class="baselayout">
+
+    <div id="map" class="baselayout">
+        <!-- MAIN MAP -->
+        <div id="mapimgLayer">
+                <img id="mapImg" src="images/pixel.gif"  style="overflow:hidden;" alt="map image" />
+        </div>
+        <div id="measureLayer" class="measureLayer"></div>
+        <div id="measureLayerTmp" class="measureLayer"></div>
+        <div id="zoombox" class="zoombox"></div>
+        <div id="helpMessage"></div>
+        <div id="scalebar"></div>
+        <div id="iqueryLayer"></div>
+        <div id="loading"><img id="loadingimg" name="loadingimg" src="images/loading.gif" alt="loading" /></div>
+    </div>
+
+
+    <div id="mapEast" class="TOOLFRAME">
+        <!-- TOOL BAR -->
+        <div id="toolBar" class="TOOLFRAME">
+            <?php  echo writebuttons($buttons, $toolbarTheme, "v"); ?>
+        </div>
+    </div>
+    
+</div>
+
+
+
+<!-- FORM FOR STORING STATUS VARIABLES -->
+<form id="varform" action="">
+ <div>
+ <input type="hidden" name="mode" value="map" />
+ <input type="hidden" name="zoom_type" value="zoomrect" />
+ <input type="hidden" name="zoom_factor" value="1" />
+ <input type="hidden" name="maction" value="box" />
+ <input type="hidden" name="zoomselected" value="0" />
+ <input type="hidden" name="tool" value="zoomin" />
+ </div>
+</form>
+
+<script type="text/javascript">
+    // use jQuery for intitialization 
+    $(document).ready(function() {
+        pm_init();
+        <?php echo $jsInitFunctions ?>
+    });
+    
+    // Create drawing object for measure function
+    jg = new jsGraphics('measureLayer');
+    jg.setColor(polyline.lineColor); 
+    jg.setStroke(polyline.lineWidth);
+    
+    //#fede
+    jg_tmp = new jsGraphics('measureLayerTmp');
+    
+</script>
+
+</body>
+</html>

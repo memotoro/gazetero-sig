@@ -1,0 +1,283 @@
+<?php
+
+/******************************************************************************
+ *
+ * Purpose: p.mapper application main entry file 
+ * Author:  Armin Burger
+ *
+ ******************************************************************************
+ *
+ * Copyright (c) 2003-2007 Armin Burger
+ *
+ * This file is part of p.mapper.
+ *
+ * p.mapper is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version. See the COPYING file.
+ *
+ * p.mapper is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with p.mapper; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ ******************************************************************************/
+
+/*
+header("Cache-Control: no-cache, must-revalidate, private, pre-check=0, post-check=0, max-age=0");
+header("Expires: " . gmdate('D, d M Y H:i:s', time()) . " GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Pragma: no-cache");
+*/
+
+session_start();
+
+// prevent XSS
+if (isset($_REQUEST['PM_INCPHP'])) exit();
+
+// INCLUDE PHP FILES
+require_once("config/__startup_config.php");
+require_once("$PM_INCPHP/group.php");
+require_once("$PM_INCPHP/globals.php");
+require_once("$PM_INCPHP/common.php");
+require_once("$PM_INCPHP/custom.php");
+require_once("$PM_INCPHP/util.php");
+require_once("$PM_INCPHP/init/initmap.php");
+require_once("$PM_INCPHP/legend.php");
+include_once("$PM_INCPHP/init/init.php");
+@include_once("config/$PM_PHP_CONFIG");
+
+
+foreach($plugin_phpFileList as $f) {
+    include_once($f);
+}
+
+// Datos recibidos por POST para el zoom a la selección.
+$coords=$_POST["coords"];
+$gid=$_POST["gid"];
+$capa=$_POST["capa"];
+
+header("Content-type: text/html; charset=$defCharset");
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo $gLanguage ?>" xml:lang="<?php echo $gLanguage ?>">
+
+<head>
+ <meta http-equiv="Content-Script-Type" content="text/javascript" />
+ <meta name="description" content="p.mapper - MapServer PHP/MapScript Framework" />
+ <meta name="author" content="Armin Burger" />
+ <meta name="keywords" content="p.mapper, pmapper, MapServer, PHP, MapScript" />
+
+ <title><?php echo $pmTitle ?></title>
+ 
+ 
+  <?php 
+    echo $jsConfigReference;
+    
+    // Load all JS files from 'javascript' and 'config' directory
+    echo $jsReference; 
+
+    // Reference all global JS variables
+    include("$PM_INCPHP_LOCATION/js_init.php"); 
+  ?>
+ 
+ <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+ <link rel="stylesheet" href="templates/default.css" type="text/css" />
+ <link rel="stylesheet" href="templates/layout.css" type="text/css" />
+ <link rel="stylesheet" href="templates/treeview.css" type="text/css" />
+ <link rel="stylesheet" href="templates/toc.css" type="text/css" />
+ <link rel="stylesheet" href="templates/query.css" type="text/css" />
+ <link rel="stylesheet" href="templates/dialog.css" type="text/css" />
+ <!--[if lt IE 7]> 
+ <link rel="stylesheet" href="templates/ie6.css" type="text/css" />
+ <![endif]--> 
+ 
+ <?php 
+    // Load all CSS files from config directory
+    echo $cssReference; 
+ ?>
+ 
+</head>
+
+<body class="BGCLG">
+
+<!-- PM_MASTER -->
+<div id="pm_master_disabled">
+
+
+<!-- NORTH -->
+<div id="north" class="FRAME1">
+</div>
+
+
+<!-- SOUTH -->
+<div id="south" class="FRAME1">
+    <div id="showcoords" class="showcoords1"><div id="xcoord"></div><div id="ycoord" ></div></div>
+    <div style="float:right; margin:4px 10px 1px 3px ;"><a href="http://mapserver.gis.umn.edu" id="mapserver_href_2" onclick="this.target = '_blank';">
+														<img src="images/powered_mapserver.png" title="UMN MapServer homepage" alt="MapServer" /></a>
+														<a href="<?php echo (isset($pmLogoUrl) ? $pmLogoUrl : "http://www.pmapper.net") ?>" id="home_href" title="<?php echo (isset($pmLogoTitle) ? $pmLogoTitle : "p.mapper homepage") ?>" onclick="this.target = '_blank';">
+														<img src="<?php echo (isset($pmLogo) ? $pmLogo : "images/logo.gif") ?>" alt="logo" /></a></div>
+    <div style="float:right; margin:8px 10px 1px 3px ;"></div>
+</div>
+
+
+<!-- WEST -->
+<div id="west">
+<script language="JavaScript">
+	zoom2extent('<?php echo $capa ?>', '<?php echo $gid ?>','<?php echo $coords ?>')
+</script> 
+</div>
+
+
+<!-- EAST -->
+<div id="east" class="TOC">
+    <!-- LEGEND/TOC -->
+    <?php echo writeTocTabs($toctabs) ?>
+    <div id="tocContainer">
+      <form id="layerform" method="get" action="">    
+        <div id="toc"       class="TOC" style="<?php echo ($_SESSION['userAgent'] == "mozilla" ? "height:100%" : "height:auto") ?>;"></div>
+        <div id="toclegend" class="TOC" style="<?php echo ($_SESSION['userAgent'] == "mozilla" ? "height:100%" : "height:auto;overflow:hidden") ?>; display:none;">pippo</div>
+      </form>
+    </div>
+</div>
+
+
+<!-- MAPZONE -->
+<div id="mapZone" class="baselayout">
+
+    <div id="map" class="baselayout">
+        <!-- MAIN MAP -->
+        <div id="mapimgLayer">
+                <img id="mapImg" class="mapImg" src="images/pixel.gif"  style="overflow:hidden;" alt="" />
+        </div>
+        <div id="zoombox" class="zoombox"></div>
+        <div id="measureLayer" class="measureLayer"></div>
+        <div id="measureLayerTmp" class="measureLayer"></div>
+        <div id="helpMessage"></div>
+        <div id="iqueryLayer"></div>
+        <div id="loading"><img id="loadingimg" src="images/loading.gif" alt="loading" /></div>
+        <div id="scaleReference">
+            <div id="scalebar"></div>
+   		</div>
+    </div>
+
+    <div id="mapNorth" class="TOOLFRAME">		
+        <div id="toolMenu">
+            <?php echo writemenu($menu1, "menu1", "Tools") ?>    
+        </div>			
+	    <div id="toolBar" class="TOOLFRAME">
+            <?php  echo writebuttons($buttons, $toolbarTheme, "h", $toolbarImgType); ?>
+        </div>		
+        <form id="searchForm" action="blank.html" onsubmit="submitSearch()" onkeypress="return disableEnterKey(event)">
+            <?php echo writeSearchContainer("inline") ?>
+        </form>
+    </div>
+
+    <div id="mapSouth" class="TOOLFRAME">
+        <div id="mapToolArea" class="TOOLFRAME"></div>
+    </div>
+
+    <div id="mapWest" class="TOOLFRAME">
+    </div>
+
+    <div id="mapEast" class="TOOLFRAME">
+        <!-- TOOL BAR -->
+        <!--
+		<div id="toolBar" class="TOOLFRAME">
+				<?php  //echo writebuttons($buttons, $toolbarTheme, "v", $toolbarImgType); ?>
+		</div>-->
+    </div>
+    
+    <!-- Slider -->
+    <div id="sliderArea" class="sliderAreaOut" >
+        <div id="sliderTool">
+            <div class="slider_top"><img id="sl_imgplus" src="images/zoomplus.gif" alt=""  /></div>
+            <div id="zslider"></div>
+            <div class="slider_bottom"><img id="sl_imgminus" src="images/zoomminus.gif" alt=""  /></div>
+        </div>
+    </div>
+    
+    <!-- Scale -->
+    <div id="scaleArea" class="TOOLFRAME">
+        <form id="scaleform"  action="javascript:zoom2scale(document.getElementById('scaleinput').value);javascript:scaleMouseOut(true)">
+            <div id="scaleArea2" class="rowdiv" >
+                <div class="celldiv"><?php echo _p("Scale") ?> 1:  </div>
+                <div class="celldiv">
+                    <div> <input type="text" id="scaleinput" name="scale" size="9" value="" onkeyup="scaleMouseOut()" onblur="scaleMouseOut(true)" onclick="initScaleSelect()" /></div>
+                    <div id="scale_suggest" onmouseover="setScaleMO()" onmouseout="setTimeout('scaleMouseOut()', 1000)"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+</div>
+
+
+<!-- REFZONE -->
+<div id="refZone" class="TOOLFRAME">
+    <!-- REFERENCE MAP -->
+    <div id="refmap" class="refmap" style="<?php echo (" width:{$refW}px; height:{$refH}px") ?>; "  >
+        <img id="refMapImg" <?php echo (" src=\"images/$refImg\" width=\"$refW\"  height=\"$refH\"")?>  alt="" />
+        <div id="refsliderbox" class="sliderbox"></div>
+        <div id="refbox" class="refbox"></div>
+        <div id="refcross" class="refcross"><img id="refcrossimg" src="images/refcross.gif"  alt="" /> </div>
+    </div>
+</div>
+
+
+<!-- INFOZONE -->
+<div id="infoZone" class="pmInfo">
+    <!-- IFRAME FOR IDENTIFY -->
+    <?php if($infoWin == "frame"): ?>
+      <div id="infoFrame" class="infoFrame"></div>
+    <?php endif; ?>
+</div>
+
+
+<div id="pmDlgContainer"   class="jqmDialog hide"></div>
+<div id="pmQueryContainer" class="jqmDialog hide"></div>
+
+<div id="pmMapRefresh" style="visibility:hidden"><img id="pmMapRefreshImg" src="images/pixel.gif" alt="" /></div>
+
+</div> <!-- END pm_master -->
+
+
+
+<!-- FORM FOR STORING STATUS VARIABLES -->
+<form id="varform" action="">
+ <div>
+ <input type="hidden" name="mode" value="map" />
+ <input type="hidden" name="zoom_type" value="zoomrect" />
+ <input type="hidden" name="zoom_factor" value="1" />
+ <input type="hidden" name="maction" value="box" />
+ <input type="hidden" name="zoomselected" value="0" />
+ <input type="hidden" name="tool" value="zoomin" />
+ 
+ </div>
+</form>
+
+
+<script type="text/javascript">
+    // use jQuery for intitialization 
+    $(document).ready(function() {
+        pm_init();
+        <?php echo $jsInitFunctions ?>
+    });
+    
+    // Create drawing object for measure function
+    jg = new jsGraphics('measureLayer');
+    jg.setColor(polyline.lineColor); 
+    jg.setStroke(polyline.lineWidth);
+    
+    //#fede
+    jg_tmp = new jsGraphics('measureLayerTmp');
+    
+</script>
+
+</body>
+</html>
