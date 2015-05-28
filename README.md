@@ -1,0 +1,5 @@
+This project displays maps with p-mapper viewer and MapServer. The database contains geographic layers stored in PostgreSQL-PostGIS. Sources code is  basically viewer-customization with p-mapper files. Configuration of the map server and raster layers are provided. Sources code with PHP scripts is provided. Those scripts were customized with certain queries to filter and display geographic data.
+
+
+
+Proyecto de visualización y consulta de mapas con el visor p-mapper y map server. La base de datos contiene capas vectoriales almacenadas en PostgreSQL-PostGIS. Se encuentran las fuentes de personalización del visor de p-mapper con los archivos .map de configuración de capas vectoriales como raster. Las fuentes propias corresponden a scripts de PHP con la que se personalizan ciertas consultas a la base de datos para filtrar la visualización geográfica de datos.
